@@ -1,0 +1,69 @@
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="row">
+    <div class="col-sm-8 offset-3">
+        {% if objects %}
+        <div class=table-wrapper>
+            <table id='unclassified_table' class="display" style="width:100%">
+                <!--class="styled-table"-->
+                <thead>
+                    <tr>
+                        {% for header in headers %}
+                        <th>{{header}}</th>
+                        {% endfor %}
+                    </tr>
+
+                    <tr class="filterrow">
+
+                        <th class="input-filter-unclassified">
+                            <input type="text" class="form-control tchatchaca" placeholder="Vyhledat">
+                        </th>
+                        <th></th>
+                        <th class="select-filter">
+                            <div class="select-filter-2" placeholder="Zvolit"></div>
+                        </th>
+                        <th class="input-filter-unclassified"><input type="text" class="form-control tchatchaca"
+                                placeholder="Vyhledat">
+                        </th>
+                        <th class="input-filter-unclassified"><input type="text" class="form-control tchatchaca"
+                                placeholder="Vyhledat">
+                        </th>
+                        <th class="input-filter-unclassified">
+                            <input type="text" class="form-control tchatchaca" placeholder="Vyhledat">
+                        </th>
+                        <th class="input-filter-unclassified">
+                            <input type="text" class="form-control tchatchaca" placeholder="Vyhledat">
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                    </tr>
+
+                </thead>
+                <tbody>
+                    {% for object in objects %}
+                    <tr>
+                        {% for k, val in object.items() %}
+                        <td>{{val}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+        </div>
+
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<div class="row">
+
+    <div class="col-sm-4 col-sm-offset-4">
+        <h2>Nahrát nový dopis</h2>
+        <br>
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <!--<label>Select image</label> -->
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="file" id="file">
+                    <label class="custom-file-label" for="file" data-browse="Vyhledat"></label>
+                    <small id="inputHelp" class="form-text text-muted">Povolený formát souborů: .pdf</small>
+                </div>
+                
+            </div>
+            <div>
+                <button type="submit" value="Upload" class="input-group-text" id="upload_submit">
+                    Nahrát
+                </button>
+            </div>
+        </form>
+    </div>
+    <br>
+</div>
+{% endblock %}

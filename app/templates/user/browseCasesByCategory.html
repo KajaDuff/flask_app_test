@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="row">
+    <div class="col-sm-10 offset-3">
+        <div class="col-sm-10" id='case_status_div'>
+            <div class="col-sm-12">
+                {%if category == 'EngCode'%}
+                <h5><b>Otevřené případy - agregace podle engagement kódu</b></h5>
+                {% elif category == 'Status' %}
+                <h5><b>Otevřené případy - agregace podle stavu</b></h5>
+                {% elif category == 'Type' %}
+                <h5><b>Otevřené případy - agregace podle typu</b></h5>
+                {% elif category == 'Created' %}
+                <h5><b>Otevřené případy - agregace podle data vytvoření</b></h5>
+                {% elif category == 'Modified' %}
+                <h5><b>Otevřené případy - agregace podle data poslední úpravy</b></h5>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-sm-10" id='case_status_div'>
+            <div class="col-sm-12">
+                <p><b>Zobrazené případy z kategorie {{subcategory}}</b></p>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class=table-wrapper>
+                <table id='browse_cases_subcategory' class="display" style="width:100%">
+                    <!--class="styled-table"-->
+                    <thead>
+                        <tr>
+                            {% for header in headers %}
+                            <th>{{header}}</th>
+                            {% endfor %}
+                        </tr>
+                        <tr class="filterrow">
+                            <th class="input-filter">
+                                <input type="text" class="form-control tchatchaca" placeholder="Vyhledat">
+                            </th>
+                            <th class="input-filter"><input type="text" class="form-control tchatchaca"
+                                    placeholder="Vyhledat"></th>
+                            <th class="select-filter">
+                                <div class="select-filter-2" placeholder="Zvolit"></div>
+                            </th>
+                            <th class="select-filter">
+                                <div class="select-filter-3" placeholder="Zvolit"></div>
+                            </th>
+                            <th class="select-filter">
+                                <div class="select-filter-4" placeholder="Zvolit"></div>
+                            </th>
+                            <th class="input-filter">
+                                <input type="text" class="form-control tchatchaca" placeholder="Vyhledat">
+                            </th>
+                            <th class="input-filter">
+                                <input type="text" class="form-control tchatchaca" placeholder="Vyhledat">
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in objects %}
+                        <tr>
+                            {% for k, val in object.items() %}
+                            <td>{{val}}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <!-- Future button trigger modal -->
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+{% endblock %}

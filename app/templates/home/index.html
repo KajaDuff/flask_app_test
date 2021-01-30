@@ -1,0 +1,15 @@
+{% import "snippets/_macros.html" as macros %}
+
+{% extends "base.html" %}
+
+
+{% block app_content %}
+
+<div class="row">
+    {{macros.build_site_navigation(pages=pages, selected="Site Details")}}
+    <div class="col-sm-9">
+        <h1>Signed user: {{ current_user.UserName }}</h1>
+    </div>
+</div>
+
+{% endblock %}

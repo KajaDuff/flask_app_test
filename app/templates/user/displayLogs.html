@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="col-sm-9 offset-3">
+    <h3 class='subtitle'>{{title}} </h3>
+</div>
+<div class="col-sm-8 offset-3">
+    <div class="table-wrapper">
+        <table id="log_table" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    {% for header in headers2 %}
+                    <th>{{header}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    {% for k, val in log.items() %}
+                    <td>{{val}}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

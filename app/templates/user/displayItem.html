@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<div class="row">
+    <div class="col-sm-9 offset-3">
+        {% if eml_output %}
+        <div class="col-sm-9" id="eml_output_div">
+            <div class="col-sm-12">
+                <p><b>Datum: </b>
+                    {% if eml_output['Datum'] %}
+                    {{eml_output['Datum'].split('+')[0]}}
+                    {% endif %}</p>
+            </div>
+            <div class="col-sm-6" id="email_header">
+                <p><b>Odesílatel: </b>{{eml_output['Odesílatel']}}</p>
+            </div>
+            <div class="col-sm-6" id="email_header">
+                <p><b>Příjemce: </b>{{eml_output['Příjemce']}}</p>
+            </div>
+            <br>
+            <div class="col-sm-12" id="email_subject">
+                <p><b>Předmět: </b>{{eml_output['Předmět']}}</p>
+            </div>
+            <div class="col-sm-12" id="email_content">
+                <textarea disabled>
+                    {{eml_output['Text zprávy']}} 
+                </textarea>
+            </div>
+            {% if eml_output['Přílohy']%}
+
+            <div class="col-sm-12" id="email_attachements">
+                <p><b id="email_header">Přílohy: </b></p>
+                {% for ii in eml_output['Přílohy'] %}
+                {% for i in ii %}
+                {% if i['filename'] != None %}
+                <div class="col-xs-11" id="email_header">
+                    {% set ext = i['filename'].split(".")[-1] %}
+                    {{i['filename']}}
+                </div>
+                {% if xlsx_output %}
+                {% set file_to_download = eml_output['Eng_code'] + "\\" + eml_output['Filename'] + "." + ext %}
+                <div class="col-xs-1">
+                    <button type="button" class="btn btn-outline-secondary" id="download_button"
+                        title="Stáhnout soubor." name="filename" value={{file_to_download}}>
+                        <img src="{{ url_for('static', filename='img/download.png')}}">
+                    </button>
+                </div>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% if email_info %}
+        {% set email_id = email_info['emailID'] %}
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-danger" id="delete_email_button" type="button"
+                value={{email_id}}>Odstranit</button>
+            <button type="button" class="btn btn-primary" id="forward_button" type="button"
+                title="Přeposlat email na xxx@gmail.cz" value={{email_id}}> Přeposlat </button>
+                <form id="forward_form">
+                    <div class="form-group">
+                      <label for="forward_input_field">Email</label>
+                      <input type="email" class="form-control" id="forward_input_field" email_id={{email_id}} aria-describedby="emailHelp" placeholder="@gmail.cz">
+                      <small id="emailHelp" class="form-text text-muted">Používejte jenom gmail emaily.</small>
+                    </div>
+                    <button type="submit" class="btn btn-secondary" id="forward_input_button">Potvrdit</button>
+                  </form>
+                  <br>
+                  <div class="alert alert-danger" role="alert" id="warning_forward">
+                    Nesprávny email!
+                </div>
+
+            <button type="button" class="btn btn-primary" id="classify_button" type="button"
+                title="Přiradit email k případu.">Zatřídit</button>
+
+            <form id="classify_form">
+                <div class="form-group">
+                    <label for="classify_input_field">ID Případu</label>
+                    <input id="classify_input_field" email_id={{email_id}} type="number" class="form-control"
+                        placeholder="ID případu" aria-label="ID případu" aria-describedby="classify_input_button">
+                    <small id="passwordHelpBlock" class="form-text text-muted">
+                        Napr.: 123
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="classify_select_field">Typ emailu</label>
+                    <select class="form-control" id="classify_select_field" required>
+                        <option value=""></option>
+                        <option value="Client">Odpověď klienta</option>
+                        <option value="Counterparty">Odpověď protistrany</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-secondary" id='classify_input_button'>Potvrdit</button>
+            </form>
+            <br>
+            <div class="alert alert-danger" role="alert" id="warning">
+                Nesprávne údaje!
+            </div>
+
+        </div>
+
+        {% endif %}
+        {% else %}
+        <div class="col-sm-10 offset-3" id="eml_output_div">
+            <div class="col-sm-12" id="no_email_subject">
+                <p><b>Automaticky generovaný oznam:</b></p>
+            </div>
+            <div class="col-sm-12" id="no_email_content">
+                <p>Žádná emailová zpráva k zobrazení.</p>
+            </div>
+        </div>
+        {% endif %}
+
+
+        {% if pdf_output %}
+        <br>
+        <div class="col-sm-10">
+            <object type="application/pdf" width="100%" height="400px" id='pdfviewer'
+                data="data:application/pdf;base64,{{pdf_output}}"></object>
+        </div>
+        <div class="col-sm-2">
+            {% if ((state_id == 20) and (type_of_contact == 1) ) %}
+            <button type="button" class="btn btn-primary" id="c6" type="button"
+                title="Schválit vygenerovaný dopis a automaticky odeslat na klienta."> Schválit </button>
+            {% elif ((state_id == 60) and (type_of_contact == 2) and (contact_type != 'Protistrana')) %}
+            <button type="button" class="btn btn-primary" id="c6" type="button"
+                title="Schválit podepsaný dopis od klienta a automaticky odeslat na protistranu."> Schválit </button>
+            {% elif ((state_id == 100) and (type_of_contact == 2) and (contact_type != 'Klient')) %}
+            <button type="button" class="btn btn-primary" id="c6" type="button"
+                title="Schválit podepsaný dopis od protistrany. Případ bude pripravený pro uzavření."> Schválit
+            </button>
+            {% else %}
+            <button type="button" class="btn btn-outline-secondary" id="c8" type="button" disabled> Schválit </button>
+            {% endif %}
+            <br>
+            {% if ((state_id in [20, 30, 40]) and (type_of_contact == 1)) %}
+            <button type="button" class="btn btn-danger" id="c7" type="button">Odstranit</button>
+            {% elif ((state_id in [60, 70]) and (type_of_contact == 2) and (contact_type != 'Protistrana')) %}
+            <button type="button" class="btn btn-danger" id="c7" type="button">Odstranit</button>
+            {% elif ((state_id in [90, 100, 110]) and (type_of_contact == 2) and (contact_type != 'Klient')) %}
+            <button type="button" class="btn btn-danger" id="c7" type="button">Odstranit</button>
+            {% elif ((state_id in [60, 70, 90, 100, 110]) and (type_of_contact == 2) and (contact_type != 'Protistrana')
+            and (contact_type != 'Klient'))%}
+            <button type="button" class="btn btn-danger" id="c7" type="button">Odstranit</button>
+            {% else %}
+            <button type="button" class="btn btn-outline-danger" id="c8" type="button" disabled>Odstranit</button>
+            {% endif %}
+            {% if ((state_id in [60, 100]) and (type_of_contact == 2) and (contact_type != 'Protistrana') and
+            (contact_type != 'Klient'))%}
+            <div class="alert alert-info" role="alert" id='alert'>
+                Emailová <b>adresa odesílatele</b> není v seznamu kontaktů a není možné určit, zda se jedná o odpověď
+                <b>klienta nebo
+                    protistrany.</b>
+                <br>
+                Ujištěte se prosím, zda <b>schvalujete správnou položku.</b>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+
+        {% if txt_output %}
+
+        <textarea disabled rows="30" cols="150">
+            {{txt_output}}
+        </textarea>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

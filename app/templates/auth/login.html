@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% import 'bootstrap/wtf.html' as wtf %}
+
+
+{% block app_content %}
+
+<div class="row">
+    <div class="col-xs-4 col-xs-offset-4" id="login_page">
+        <h1>Přihlášení</h1>
+        <br>
+        {{ wtf.quick_form(form, extra_classes="auth_form") }}
+        <br>
+        <br>
+        
+        
+        <!--
+            <p>Nový uživatel? <a href="{{ url_for('auth.register') }}">Zaregistrujte se.</a></p>
+            <p>
+            Zapomenuté heslo?
+            <a href="{{ url_for('auth.reset_password_request') }}">Požádat o změnu hesla.</a>
+        </p>
+
+        -->
+
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

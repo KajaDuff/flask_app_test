@@ -1,0 +1,73 @@
+<!--1-->
+
+
+{% macro build_site_navigation() %}
+
+{%set case_id = request.path.split('/')[3] %}
+{%set item_id = request.path.split('/')[4] %}
+{%set state_id = request.url.split('?')[1] %}
+
+<div class="col-sm-3" id="side_navbar">
+    <div class="navigation-menu">
+        {% if  request.endpoint in [
+        'user.aggregated', 'user.aggregated_subcategory', 'user.unclassified',
+        'user.userProfile','auth.register','auth.changePassword', 'home.help'
+        ] %}
+
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a {% if request.endpoint=='user.aggregated' %} class="current_link" {% endif %}
+                    href="{{ url_for('user.aggregated', category = 'EngCode') }}">Přehledy kategorií případů</a>
+            </li>
+            <li class="nav-item">
+                <a {% if request.path=='/user/browse/unclassified' %} class="current_link" {% endif %}
+                    href="{{ url_for('user.unclassified') }}">Nezpracované emaily</a>
+            </li>
+        </ul>
+        {% else %}
+        <button type="button" class="btn btn-outline-secondary" id="Toggle_navbar"><img src="{{ url_for('static', filename='img/menu.png')}}"></button>
+        <ul class="nav flex-column" id = main_menu>
+            <li class="nav-item">
+                <a {% if request.endpoint=='user.aggregated' %} class="current_link" {% endif %}
+                    href="{{ url_for('user.aggregated', category = 'EngCode') }}">Přehledy kategorií případů</a>
+            </li>
+            <li class="nav-item">
+                <a {% if request.path=='/user/browse/unclassified' %} class="current_link" {% endif %}
+                    href="{{ url_for('user.unclassified') }}">Nezpracované emaily</a>
+            </li>
+        </ul>
+        <ul class="nav flex-column" id = "toggle_nav">
+            <li class="nav-item">
+                {% if (request.endpoint == 'user.browseCaseItems') %}
+                <a id="sublink" href='{{request.url}}'><span>Případ
+                        {{(request.path.split('/')[3]).split('_')[2]}}</span>
+                </a>
+                {% elif (request.endpoint == 'user.displayEmail') %}
+                <a id="sublink" href='{{request.url}}'><span>Email
+                    {{(request.path.split('/')[3]).split('_')[2]}}</span>
+            </a>
+                {% elif (request.endpoint == 'user.displayItem') %}
+                <a id="sublink" href="{{'/user/browse/'+ case_id + '?'+ state_id }}"><span>Případ
+                        {{(request.path.split('/')[3]).split('_')[2]}}</span>
+                    <a id="sublink" href='{{request.url}}'>Položka {{(request.path.split('/')[4]).split('_')[2]}}</a>
+                    {% elif (request.endpoint == 'user.displayCaseLogs') %}
+                    <a id="sublink" href='{{request.url}}'>Historie změn případu
+                        {{(request.path.split('/')[3]).split("_")[2]}}</a>
+
+                    {% elif (request.endpoint == 'user.displayItemLogs') %}
+                    <a id="sublink" href="{{'/user/browse/'+ case_id + '?'+ state_id }}">Případ
+                        {{(request.path.split('/')[3]).split('_')[2]}}</a>
+                    <a id="sublink" href='{{request.url}}'>Historie změn položky
+                        {{(request.path.split('/')[4]).split("_")[2]}}</a>
+                    {% endif %}
+            </li>
+        </ul>
+        {% endif %}
+        
+    </div>
+
+</div>
+
+</div>
+
+{% endmacro %}

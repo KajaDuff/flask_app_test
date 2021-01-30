@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<div class="row">
+    <div class="col-sm-10 offset-3">
+        <div class="col-sm-10" id='case_status_div'>
+            <div class="col-sm-12">
+                {%if category == 'EngCode'%}
+                    <h5><b>Otevřené případy - agregace podle kódu</b></h5>
+                {% elif category == 'Status' %}
+                <h5><b>Otevřené případy - agregace podle stavu</b></h5>
+                {% elif category == 'Type' %}
+                <h5><b>Otevřené případy - agregace podle typu</b></h5>
+                {% elif category == 'Created' %}
+                <h5><b>Otevřené případy - agregace podle data vytvoření</b></h5>
+                {% elif category == 'Modified' %}
+                <h5><b>Otevřené případy - agregace podle data poslední úpravy</b></h5>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-sm-10" id='case_status_buttons'>
+            <div class="col-sm-12">
+                <div class="btn-group" id='category_buttons' role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-outline-secondary" class='category_btn' category_value='EngCode'>Engagement kód</button>
+                    <button type="button" class="btn btn-outline-secondary" class='category_btn' category_value='Status'>Status</button>
+                    <button type="button" class="btn btn-outline-secondary" class='category_btn' category_value='Type'>Typ</button>
+                    <button type="button" class="btn btn-outline-secondary" class='category_btn' category_value='Client'>Klient</button>
+                    <button type="button" class="btn btn-outline-secondary" class='category_btn' category_value='Counterparty'>Protistrana</button>
+                    <button type="button" class="btn btn-outline-secondary" class='category_btn' category_value='Created'>Vytvořeno</button>
+                    <button type="button" class="btn btn-outline-secondary" class='category_btn' category_value='Modified'>Změněno</button>
+                  </div>
+            </div>
+        </div>
+        <div class="col-sm-10">
+            <div class=table-wrapper>
+                <table id='browse_cases_aggregated' class="display" style="width:100%">
+                    <!--class="styled-table"-->
+                    <thead>
+                        <tr>
+                            {% for header in headers %}
+                            <th>{{header}}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in objects %}
+                        <tr>
+                            {% for k, val in object.items() %}
+                            <td>{{val}}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <!-- Future button trigger modal -->
+
+        </div>
+
+    </div>
+    
+
+</div>
+
+
+
+{% endblock %}
